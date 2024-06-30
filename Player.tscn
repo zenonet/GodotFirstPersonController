@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgdkt1n2tre1x"]
+
+[ext_resource type="Script" path="res://FirstPersonController.gd" id="1_8lccc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8q0e5"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_8lccc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_8q0e5")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(0.569015, 0, 0, 0, 1, 0, 0, 0, 0.455809, 0, -0.285156, 0)
+size = Vector3(1, 0.429688, 1)
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.714844, 0)
