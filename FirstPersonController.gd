@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 
 const SPEED = 5.0
+const SPRINT_SPEED = 7.0
 const JUMP_VELOCITY = 4.5
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -17,16 +18,12 @@ func _process(delta):
 		get_tree().quit()
 
 func _input(event):  		
-	if event is InputEventMouseMotion:
+	if not event is  InputEventMouseMotion: return
 
-		rotation_degrees.y += -event.relative.x*mouse_sensitivity
-		var x = -event.relative.y*mouse_sensitivity
-		if $Camera.rotation_degrees.x+x>-50 and $Camera.rotation_degrees.x+x<50:
-			$Camera.rotation_degrees.x += x
-
-
-func get_body_forward():
-	return Vector3(cos(rotation.y), 0, sin(rotation.y))
+	rotation_degrees.y += -event.relative.x*mouse_sensitivity
+	var x = -event.relative.y*mouse_sensitivity
+	if $Camera.rotation_degrees.x+x>-50 and $Camera.rotation_degrees.x+x<50:
+		$Camera.rotation_degrees.x += x
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -39,13 +36,19 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var direction = (Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	print(get_body_forward())
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, rotation.y)
+
+	var speed
+	if Input.is_action_pressed("sprint"):
+		speed = SPRINT_SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		speed = SPEED
+	
+	if direction:
+		velocity.x = direction.x * speed
+		velocity.z = direction.z * speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 
 	move_and_slide()
