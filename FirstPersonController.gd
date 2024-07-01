@@ -4,8 +4,11 @@ extends CharacterBody3D
 const SPEED = 5.0
 const SPRINT_SPEED = 7.0
 const JUMP_VELOCITY = 4.5
+const BULLET_SPREAD = 2
+const FIRE_RATE = 30 # In bullets/second
 
 @onready var raycast = $"Camera/RayCast"
+@export var bulletScene: PackedScene
 var pickupObj = null
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -16,7 +19,9 @@ var mouse_sensitivity = 0.25
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
+var time_since_bullet = 0.0
 func _process(delta):
+	time_since_bullet += delta
 	if Input.is_action_just_released("close"):
 		get_tree().quit()
 
@@ -37,6 +42,21 @@ func let_go():
 	pickupObj.freeze = false
 	pickupObj.reparent(get_parent())
 	pickupObj = null
+
+func shoot():
+
+	if(time_since_bullet < 1.0/FIRE_RATE):
+		return
+	
+	time_since_bullet = 0
+	var b = bulletScene.instantiate()
+	get_tree().root.add_child(b)
+	b.position = $"Camera/Guntip".global_position
+	
+	var x_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD)
+	var y_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD)
+	
+	b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
 
 func _physics_process(delta):
 	
@@ -72,5 +92,8 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
+		
+	if Input.is_action_pressed("shoot"):
+		shoot()
 
 	move_and_slide()
