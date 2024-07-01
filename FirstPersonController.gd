@@ -41,7 +41,7 @@ func let_go():
 func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("pickup"):
-		if pickupObj == null and raycast.is_colliding():
+		if pickupObj == null and raycast.is_colliding() and raycast.get_collider() is RigidBody3D:
 			pickup(raycast.get_collider())
 		else:
 			if pickupObj != null:
