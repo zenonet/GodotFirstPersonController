@@ -18,3 +18,8 @@ size = Vector3(1, 0.429688, 1)
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.714844, 0)
+
+[node name="RayCast" type="RayCast3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+exclude_parent = false
+target_position = Vector3(0, -1.8, 0)
