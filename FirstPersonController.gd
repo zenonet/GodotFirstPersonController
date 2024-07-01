@@ -6,6 +6,8 @@ const SPRINT_SPEED = 7.0
 const JUMP_VELOCITY = 4.5
 const BULLET_SPREAD = 2
 const FIRE_RATE = 30 # In bullets/second
+const MOVE_RECOIL = 8
+const AIM_RECOIL = 0.4
 
 @onready var raycast = $"Camera/RayCast"
 @export var bulletScene: PackedScene
@@ -52,9 +54,17 @@ func shoot():
 	var b = bulletScene.instantiate()
 	get_tree().root.add_child(b)
 	b.position = $"Camera/Guntip".global_position
-	
+
+	# add spread
 	var x_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD)
 	var y_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD)
+	
+	# add movement recoil
+	velocity += transform.basis.z * MOVE_RECOIL
+	
+	# add aim recoil
+	$Camera.rotation_degrees.x += AIM_RECOIL
+	rotation_degrees.y += randf_range(-AIM_RECOIL, AIM_RECOIL)
 	
 	b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
 
@@ -73,7 +83,7 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
