@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgdkt1n2tre1x"]
+[gd_scene load_steps=5 format=3 uid="uid://dgdkt1n2tre1x"]
 
 [ext_resource type="Script" path="res://FirstPersonController.gd" id="1_8lccc"]
 [ext_resource type="PackedScene" uid="uid://cw8eo44imysbl" path="res://bullet.tscn" id="2_hn1b3"]
+[ext_resource type="PackedScene" uid="uid://b404764qr4syq" path="res://AK47.glb" id="3_wn5n4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8q0e5"]
 
@@ -16,6 +17,7 @@ shape = SubResource("CapsuleShape3D_8q0e5")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(0.569015, 0, 0, 0, 1, 0, 0, 0, 0.455809, 0, -0.285156, 0)
+visible = false
 size = Vector3(1, 0.429688, 1)
 
 [node name="Camera" type="Camera3D" parent="."]
@@ -27,4 +29,7 @@ exclude_parent = false
 target_position = Vector3(0, -1.8, 0)
 
 [node name="Guntip" type="Marker3D" parent="Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.269573, -0.178406, -0.580368)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.410764, -0.224087, -1.22093)
+
+[node name="AK47" parent="Camera" instance=ExtResource("3_wn5n4")]
+transform = Transform3D(-1.09278e-08, -0.25, 1.09278e-08, 0, -1.09278e-08, -0.25, 0.25, -1.09278e-08, 4.77671e-16, 0.412, -0.31, -0.666)

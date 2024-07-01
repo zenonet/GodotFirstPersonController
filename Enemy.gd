@@ -3,6 +3,8 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
+var health:int = 50
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var player = $"%Player"
@@ -19,3 +21,12 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
+
+func apply_damage(amount:int):
+	health -= amount
+	print("now on %d hp" % health)
+	if(health <= 0):
+		die()
+		
+func die():
+	queue_free()

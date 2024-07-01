@@ -67,6 +67,22 @@ func shoot():
 	rotation_degrees.y += randf_range(-AIM_RECOIL, AIM_RECOIL)
 	
 	b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
+	
+	
+	""""
+	# Now, do hitscan:
+	var space_state = get_world_3d().direct_space_state
+	
+	var query = PhysicsRayQueryParameters3D.create($Camera.global_position, $Camera.global_position + -$Camera.transform.basis.z*600)
+	var result = space_state.intersect_ray(query)
+	if result.is_empty() or result.collider == null:
+		print("No hit")
+		return
+	
+	print("hit on %s" % result.collider.name)
+	if result.collider.name == "Enemy":
+		result.collider.apply_damage(1)
+	"""
 
 func _physics_process(delta):
 	
