@@ -13,6 +13,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var player = $"%Player"
 
 var state: EnemyState = EnemyState.Idle
+var investigationTarget: Vector3
+@onready var idlePosition:Vector3 = position
 
 func _ready():
 	GameManager.sound_created.connect(sound_created)
@@ -26,7 +28,10 @@ func sound_created(sound_position:Vector3, volume:float):
 		return
 	
 	if state != EnemyState.Chase:
-		on_found_player()
+		print("Investigating...")
+		state = EnemyState.Investigating
+		investigationTarget = sound_position
+		$agent.set_target_position(sound_position)
 	
 func check_vision():
 	var angle:float = rad_to_deg((player.global_position - position).angle_to(-$Eyes.global_basis.z))
@@ -37,7 +42,7 @@ func check_vision():
 		var result = space_state.intersect_ray(query)
 		if result.is_empty() or result.collider != player:
 			return
-			
+		print("Chasing...")
 		on_found_player()
 
 func on_found_player():
@@ -50,25 +55,37 @@ func _physics_process(delta):
 		return
 	
 	if(state == EnemyState.Idle):
+		if(position.distance_squared_to(idlePosition) > 1):
+			$agent.set_target_position(idlePosition)
 		check_vision()
-		return
+	
+	if(state == EnemyState.Investigating):
+		check_vision()
+		if $agent.is_target_reached():
+			var desRot = rad_to_deg(global_position.angle_to(idlePosition)) + 360
+			if(abs(desRot - rotation_degrees.y) < 5):
+				print("Investigation over, returning to idle position")
+				state = EnemyState.Idle
+				return
+			rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 0.8)
 		
 	var direction:Vector3
 	if(state == EnemyState.Chase):
 		$agent.set_target_position(player.position)
-		direction = ($agent.get_next_path_position() - position).normalized()
-
+		
+	if $agent.is_target_reached():
+		return
+	
+	direction = ($agent.get_next_path_position() - position).normalized()
+	print(direction)
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-	
-	look_at(position+direction)
-	rotation_degrees.x = 0
-	rotation_degrees.z = 0
-
+		
+	rotation_degrees.y = rad_to_deg(rotate_toward(rotation.y, global_position.angle_to(direction), 0.4))
 	move_and_slide()
 
 func apply_damage(amount:int):
@@ -82,6 +99,6 @@ func die():
 
 enum EnemyState{
 	Idle,
-	Patrol,
 	Chase,
+	Investigating,
 }
