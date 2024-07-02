@@ -97,4 +97,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 2.14376, 4.54562)
 
 [node name="Enemy" parent="Node3D" instance=ExtResource("2_rm4ge")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.7443, 0.919045, -1.93168)
-visible = false

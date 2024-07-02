@@ -24,6 +24,7 @@ func _ready():
 var time_since_bullet = 0.0
 func _process(delta):
 	time_since_bullet += delta
+	# print(-$Camera.global_basis.z)
 	if Input.is_action_just_released("close"):
 		get_tree().quit()
 
@@ -32,7 +33,7 @@ func _input(event):
 
 	rotation_degrees.y += -event.relative.x*mouse_sensitivity
 	var x = -event.relative.y*mouse_sensitivity
-	if $Camera.rotation_degrees.x+x>-50 and $Camera.rotation_degrees.x+x<50:
+	if $Camera.rotation_degrees.x+x>-89 and $Camera.rotation_degrees.x+x<89:
 		$Camera.rotation_degrees.x += x
 
 func pickup(obj):
@@ -68,21 +69,20 @@ func shoot():
 	
 	b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
 	
-	
-	""""
 	# Now, do hitscan:
 	var space_state = get_world_3d().direct_space_state
 	
-	var query = PhysicsRayQueryParameters3D.create($Camera.global_position, $Camera.global_position + -$Camera.transform.basis.z*600)
+	var query = PhysicsRayQueryParameters3D.create($Camera.global_position, $Camera.global_position - $Camera.global_basis.z*600)
+
 	var result = space_state.intersect_ray(query)
 	if result.is_empty() or result.collider == null:
-		print("No hit")
 		return
 	
-	print("hit on %s" % result.collider.name)
 	if result.collider.name == "Enemy":
 		result.collider.apply_damage(1)
-	"""
+		
+	if result.collider is RigidBody3D:
+		result.collider.apply_impulse((-transform.basis.z).normalized()*0.5, result.position)
 
 func _physics_process(delta):
 	
