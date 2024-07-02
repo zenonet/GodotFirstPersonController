@@ -64,7 +64,7 @@ func shoot():
 
 	var result = get_world_3d().direct_space_state.intersect_ray(query)
 	if !result.is_empty() and result.collider != null:
-		if result.collider.name == "Enemy":
+		if result.collider.is_in_group("enemies"):
 			result.collider.apply_damage(1)
 			
 		if result.collider is RigidBody3D:
@@ -111,7 +111,7 @@ func _physics_process(delta):
 				let_go()
 				
 	if Input.is_action_just_pressed("silent_takedown"):
-		if raycast.is_colliding() and raycast.get_collider().name == "Enemy":
+		if raycast.is_colliding() and raycast.get_collider().is_in_group("enemies"):
 			taking_down_enemy = raycast.get_collider()
 			taking_down_enemy.is_silent_takedown = true
 			time_left_for_takedown = 3

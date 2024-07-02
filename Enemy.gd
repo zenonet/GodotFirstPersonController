@@ -77,7 +77,6 @@ func _physics_process(delta):
 		return
 	
 	direction = ($agent.get_next_path_position() - position).normalized()
-	print(direction)
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
