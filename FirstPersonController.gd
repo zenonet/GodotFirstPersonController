@@ -21,7 +21,7 @@ var mouse_sensitivity = 0.25
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-var time_since_bullet = 0.0
+var time_since_bullet:float = 0.0
 func _process(delta):
 	time_since_bullet += delta
 	# print(-$Camera.global_basis.z)
@@ -64,8 +64,9 @@ func shoot():
 	velocity += transform.basis.z * MOVE_RECOIL
 	
 	# add aim recoil
-	$Camera.rotation_degrees.x += AIM_RECOIL
-	rotation_degrees.y += randf_range(-AIM_RECOIL, AIM_RECOIL)
+	if $Camera.rotation_degrees.x+AIM_RECOIL>-89 and $Camera.rotation_degrees.x+AIM_RECOIL<89:
+		$Camera.rotation_degrees.x += AIM_RECOIL
+		rotation_degrees.y += randf_range(-AIM_RECOIL, AIM_RECOIL)
 	
 	b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
 	
@@ -82,7 +83,7 @@ func shoot():
 		result.collider.apply_damage(1)
 		
 	if result.collider is RigidBody3D:
-		result.collider.apply_impulse((-transform.basis.z).normalized()*0.5, result.position)
+		result.collider.apply_impulse((-transform.basis.z).normalized(), result.position)
 
 func _physics_process(delta):
 	

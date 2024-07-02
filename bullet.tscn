@@ -12,6 +12,7 @@ script = ExtResource("1_j4sns")
 radius = 0.05
 radial_segments = 4
 rings = 2
+smooth_faces = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_ewa6u")

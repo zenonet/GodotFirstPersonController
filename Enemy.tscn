@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://n3g67hw51j60"]
+[gd_scene load_steps=4 format=3 uid="uid://n3g67hw51j60"]
 
 [ext_resource type="Script" path="res://Enemy.gd" id="1_c2dqd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6qpqb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r8421"]
+albedo_color = Color(0.083392, 0.083392, 0.083392, 1)
 
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_c2dqd")
@@ -16,3 +19,10 @@ shape = SubResource("CapsuleShape3D_6qpqb")
 transform = Transform3D(1, 0, 0, 0, 2.01064, 0, 0, 0, 1, 0, 0, 0)
 radial_segments = 24
 rings = 12
+
+[node name="Eyes" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.579128, -0.398012)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(0.736203, 0, 0, 0, 0.191003, 0, 0, 0, 0.444375, 0, 0.572749, -0.195681)
+material = SubResource("StandardMaterial3D_r8421")
