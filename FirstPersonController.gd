@@ -5,7 +5,7 @@ const SPEED = 5.0
 const SPRINT_SPEED = 7.0
 const JUMP_VELOCITY = 4.5
 const BULLET_SPREAD = 2
-const FIRE_RATE = 30 # In bullets/second
+const FIRE_RATE = 20 # In bullets/second
 const MOVE_RECOIL = 8
 const AIM_RECOIL = 0.4
 
@@ -69,6 +69,11 @@ func shoot():
 		rotation_degrees.y += randf_range(-AIM_RECOIL, AIM_RECOIL)
 	
 	b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
+	
+	# create noise
+	GameManager.sound_created.emit($Camera/Guntip.global_position, 1)
+	#if not $"Camera/audioPlayer".is_playing():
+	$"Camera/audioPlayer".play()
 	
 	# Now, do hitscan:
 	var space_state = get_world_3d().direct_space_state

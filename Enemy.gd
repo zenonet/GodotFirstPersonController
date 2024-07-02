@@ -3,6 +3,7 @@ extends CharacterBody3D
 const SPEED:float = 5.0
 const JUMP_VELOCITY:float = 4.5
 const SPOT_FOV = 38.0
+const EAR_THRESHOLD = 0.05
 
 var health:int = 20
 
@@ -11,6 +12,18 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var player = $"%Player"
 
 var state: EnemyState = EnemyState.Idle
+
+func _ready():
+	GameManager.sound_created.connect(sound_created)
+	
+func sound_created(sound_position:Vector3, volume:float):
+	var local_volume:float = volume/position.distance_to(sound_position)
+	print(local_volume)
+	if(local_volume <= EAR_THRESHOLD): 
+		return
+	
+	on_found_player()
+		
 
 func check_vision():
 	var angle:float = rad_to_deg((player.global_position - position).angle_to(-$Eyes.global_basis.z))
@@ -22,7 +35,12 @@ func check_vision():
 		if result.is_empty() or result.collider != player:
 			return
 			
-		state = EnemyState.Chase
+		on_found_player()
+
+func on_found_player():
+	$Voice.play()
+	GameManager.sound_created.emit(global_position, 0.4)
+	state = EnemyState.Chase
 
 func _physics_process(delta):
 	if(state == EnemyState.Idle):
