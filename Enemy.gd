@@ -6,6 +6,7 @@ const SPOT_FOV = 38.0
 const EAR_THRESHOLD = 0.05
 
 var health:int = 20
+var is_silent_takedown:bool = false
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -17,14 +18,16 @@ func _ready():
 	GameManager.sound_created.connect(sound_created)
 	
 func sound_created(sound_position:Vector3, volume:float):
+	if(sound_position == global_position or is_silent_takedown):
+		return
 	var local_volume:float = volume/position.distance_to(sound_position)
-	print(local_volume)
+
 	if(local_volume <= EAR_THRESHOLD): 
 		return
 	
-	on_found_player()
-		
-
+	if state != EnemyState.Chase:
+		on_found_player()
+	
 func check_vision():
 	var angle:float = rad_to_deg((player.global_position - position).angle_to(-$Eyes.global_basis.z))
 	if angle < SPOT_FOV:
@@ -43,6 +46,9 @@ func on_found_player():
 	state = EnemyState.Chase
 
 func _physics_process(delta):
+	if is_silent_takedown:
+		return
+	
 	if(state == EnemyState.Idle):
 		check_vision()
 		return

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://n3g67hw51j60"]
 
 [ext_resource type="Script" path="res://Enemy.gd" id="1_c2dqd"]
-[ext_resource type="AudioStream" uid="uid://dp0xstadkrb5r" path="res://sounds/hey.wav" id="2_f6ms2"]
+[ext_resource type="AudioStream" uid="uid://dp0xstadkrb5r" path="res://hey.wav" id="2_w1ri6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6qpqb"]
 
@@ -29,5 +29,5 @@ transform = Transform3D(0.736203, 0, 0, 0, 0.191003, 0, 0, 0, 0.444375, 0, 0.572
 material = SubResource("StandardMaterial3D_r8421")
 
 [node name="Voice" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("2_f6ms2")
+stream = ExtResource("2_w1ri6")
 bus = &"Voice"

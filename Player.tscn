@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://FirstPersonController.gd" id="1_8lccc"]
 [ext_resource type="PackedScene" uid="uid://cw8eo44imysbl" path="res://bullet.tscn" id="2_hn1b3"]
 [ext_resource type="PackedScene" uid="uid://b404764qr4syq" path="res://AK47.glb" id="3_wn5n4"]
-[ext_resource type="AudioStream" uid="uid://b5nlnq3jfqs55" path="res://shot.wav" id="4_lr72x"]
+[ext_resource type="AudioStream" uid="uid://b5nlnq3jfqs55" path="res://sounds/shot.wav" id="4_wp0sl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8q0e5"]
 
@@ -16,11 +16,6 @@ shape = SubResource("CapsuleShape3D_8q0e5")
 
 [node name="Node3D" type="Node3D" parent="."]
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(0.569015, 0, 0, 0, 1, 0, 0, 0, 0.455809, 0, -0.285156, 0)
-visible = false
-size = Vector3(1, 0.429688, 1)
-
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.714844, 0)
 
@@ -30,12 +25,12 @@ exclude_parent = false
 target_position = Vector3(0, -1.8, 0)
 
 [node name="Guntip" type="Marker3D" parent="Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.410764, -0.224087, -1.22093)
+transform = Transform3D(0.985121, 0, 0.17186, 0, 1, 0, -0.17186, 0, 0.985121, 0.410764, -0.224087, -1.22093)
 
 [node name="AK47" parent="Camera" instance=ExtResource("3_wn5n4")]
 transform = Transform3D(-1.09278e-08, -0.25, 1.09278e-08, 0, -1.09278e-08, -0.25, 0.25, -1.09278e-08, 4.77671e-16, 0.412, -0.31, -0.666)
 
 [node name="audioPlayer" type="AudioStreamPlayer3D" parent="Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.415507, -0.210995, -0.721173)
-stream = ExtResource("4_lr72x")
+stream = ExtResource("4_wp0sl")
 bus = &"SFX"
