@@ -24,13 +24,22 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 exclude_parent = false
 target_position = Vector3(0, -1.8, 0)
 
-[node name="Guntip" type="Marker3D" parent="Camera"]
-transform = Transform3D(0.985121, 0, 0.17186, 0, 1, 0, -0.17186, 0, 0.985121, 0.410764, -0.224087, -1.22093)
-
-[node name="AK47" parent="Camera" instance=ExtResource("3_wn5n4")]
-transform = Transform3D(-1.09278e-08, -0.25, 1.09278e-08, 0, -1.09278e-08, -0.25, 0.25, -1.09278e-08, 4.77671e-16, 0.412, -0.31, -0.666)
-
 [node name="audioPlayer" type="AudioStreamPlayer3D" parent="Camera"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.415507, -0.210995, -0.721173)
 stream = ExtResource("4_wp0sl")
 bus = &"SFX"
+
+[node name="NormalGunPos" type="Marker3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, -0.24, -0.59)
+
+[node name="AimGunPos" type="Marker3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.005, -0.18, -0.285)
+
+[node name="Weapon" type="Node3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, -0.24, -0.59)
+
+[node name="AK47" parent="Camera/Weapon" instance=ExtResource("3_wn5n4")]
+transform = Transform3D(-1.09278e-08, -0.25, 1.09278e-08, 0, -1.09278e-08, -0.25, 0.25, -1.09278e-08, 4.77671e-16, 0, 0, 0)
+
+[node name="Guntip" type="Marker3D" parent="Camera/Weapon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.079164, -0.53577)

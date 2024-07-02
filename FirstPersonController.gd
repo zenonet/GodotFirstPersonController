@@ -18,6 +18,8 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var mouse_sensitivity = 0.25
 
+var is_aiming:bool = false
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
@@ -28,7 +30,8 @@ func _process(delta):
 	if Input.is_action_just_released("close"):
 		get_tree().quit()
 
-func _input(event):  		
+func _input(event):
+	is_aiming = Input.is_action_pressed("aim")
 	if not event is  InputEventMouseMotion: return
 
 	rotation_degrees.y += -event.relative.x*mouse_sensitivity
@@ -52,8 +55,8 @@ func shoot():
 		return
 	
 	# get spread
-	var x_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD)
-	var y_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD)
+	var x_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD) / (2 if(is_aiming) else 1)
+	var y_spread = randf_range(-BULLET_SPREAD, BULLET_SPREAD) / (2 if(is_aiming) else 1)
 	
 	# do hitscan:
 	var bullet_direction:Vector3 = ($Camera.global_position - $Camera.global_basis.z*600).rotated($Camera.global_basis.x, deg_to_rad(y_spread)).rotated($Camera.global_basis.y, deg_to_rad(x_spread))
@@ -65,36 +68,40 @@ func shoot():
 			result.collider.apply_damage(1)
 			
 		if result.collider is RigidBody3D:
-			result.collider.apply_impulse((-transform.basis.z).normalized()*1.5, result.position)
+			result.collider.apply_impulse((-transform.basis.z).normalized(), result.position)
 	
 	
 	time_since_bullet = 0
 	var b = bulletScene.instantiate()
 	get_tree().root.add_child(b)
-	b.position = $"Camera/Guntip".global_position
+	b.position = $"Camera/Weapon/Guntip".global_position
 	if(!result.is_empty() and result.collider != null):
 		b.look_at(b.position+bullet_direction) # Make bullets exactly fly at the hit position of the raycast
 	else:
 		b.rotation_degrees = Vector3($Camera.rotation_degrees.x+x_spread, rotation_degrees.y+y_spread, 0) # if the ray didn#t hit, just shoot forward
 	
 	# add movement recoil
-	velocity += transform.basis.z * MOVE_RECOIL
+	velocity += transform.basis.z * MOVE_RECOIL / (2 if(is_aiming) else 1)
 	
 	# add aim recoil
 	if $Camera.rotation_degrees.x+AIM_RECOIL>-89 and $Camera.rotation_degrees.x+AIM_RECOIL<89:
-		$Camera.rotation_degrees.x += AIM_RECOIL
+		$Camera.rotation_degrees.x += AIM_RECOIL / (2 if(is_aiming) else 1)
 		rotation_degrees.y += randf_range(-AIM_RECOIL, AIM_RECOIL)
 	
 	#b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
 	
 	# create noise
-	GameManager.sound_created.emit($Camera/Guntip.global_position, 1)
+	GameManager.sound_created.emit($Camera/Weapon/Guntip.global_position, 1)
 	if not $"Camera/audioPlayer".is_playing():
 		$"Camera/audioPlayer".play()
 
 var taking_down_enemy: CharacterBody3D = null
 var time_left_for_takedown:float
 func _physics_process(delta):
+	if is_aiming:
+		$"Camera/Weapon".position = $"Camera/Weapon".position.move_toward($Camera/AimGunPos.position, 0.05)
+	else:
+		$"Camera/Weapon".position = $"Camera/Weapon".position.move_toward($Camera/NormalGunPos.position, 0.05)
 	
 	if Input.is_action_just_pressed("pickup"):
 		if pickupObj == null and raycast.is_colliding() and raycast.get_collider() is RigidBody3D:
