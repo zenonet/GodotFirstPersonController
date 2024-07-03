@@ -19,6 +19,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var mouse_sensitivity = 0.25
 
 var is_aiming:bool = false
+var is_crouching:bool = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -32,6 +33,7 @@ func _process(delta):
 
 func _input(event):
 	is_aiming = Input.is_action_pressed("aim")
+	is_crouching = Input.is_action_pressed("crouch")
 	if not event is  InputEventMouseMotion: return
 
 	rotation_degrees.y += -event.relative.x*mouse_sensitivity
@@ -102,6 +104,11 @@ func _physics_process(delta):
 		$"Camera/Weapon".position = $"Camera/Weapon".position.move_toward($Camera/AimGunPos.position, 0.05)
 	else:
 		$"Camera/Weapon".position = $"Camera/Weapon".position.move_toward($Camera/NormalGunPos.position, 0.05)
+		
+	if is_crouching:
+		$Camera.position = $Camera.position.move_toward($CrouchingCameraPosition.position, 0.05)
+	else:
+		$Camera.position = $Camera.position.move_toward($NormalCameraPosition.position, 0.05)
 	
 	if Input.is_action_just_pressed("pickup"):
 		if pickupObj == null and raycast.is_colliding() and raycast.get_collider() is RigidBody3D:
@@ -139,11 +146,17 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, rotation.y)
 
+	if(direction && !is_crouching):
+		GameManager.sound_created.emit(global_position, 0.1)
+
 	var speed
 	if Input.is_action_pressed("sprint"):
 		speed = SPRINT_SPEED
 	else:
 		speed = SPEED
+	
+	if(is_crouching):
+		speed /= 2
 	
 	if direction:
 		velocity.x = direction.x * speed

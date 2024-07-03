@@ -34,7 +34,8 @@ func sound_created(sound_position:Vector3, volume:float):
 		$agent.set_target_position(sound_position)
 	
 func check_vision():
-	var angle:float = rad_to_deg((player.global_position - position).angle_to(-$Eyes.global_basis.z))
+	
+	var angle:float = rad_to_deg((player.find_child("Camera").global_position - position).angle_to(-$Eyes.global_basis.z))
 	if angle < SPOT_FOV:
 		var space_state = get_world_3d().direct_space_state
 		var query = PhysicsRayQueryParameters3D.create($Eyes.global_position, player.global_position)

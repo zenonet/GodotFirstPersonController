@@ -43,3 +43,9 @@ transform = Transform3D(-1.09278e-08, -0.25, 1.09278e-08, 0, -1.09278e-08, -0.25
 
 [node name="Guntip" type="Marker3D" parent="Camera/Weapon"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.079164, -0.53577)
+
+[node name="NormalCameraPosition" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.714844, 0)
+
+[node name="CrouchingCameraPosition" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.314563, 0)
