@@ -16,6 +16,9 @@ var state: EnemyState = EnemyState.Idle
 var investigationTarget: Vector3
 @onready var idlePosition:Vector3 = position
 
+
+var player_visibility:int = 0 
+
 func _ready():
 	GameManager.sound_created.connect(sound_created)
 	
@@ -42,9 +45,18 @@ func check_vision():
 
 		var result = space_state.intersect_ray(query)
 		if result.is_empty() or result.collider != player:
+			if player_visibility > 0:
+				player_visibility -= 1
 			return
-		print("Chasing...")
-		on_found_player()
+			
+		player_visibility += 1
+		
+		if player_visibility >= 70:
+			print("Chasing...")
+			on_found_player()
+	else:
+		if player_visibility > 0:
+			player_visibility -= 1
 
 func on_found_player():
 	$Voice.play()
