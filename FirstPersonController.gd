@@ -136,9 +136,11 @@ func _physics_process(delta):
 			return
 		if raycast.is_colliding() and raycast.get_collider() == taking_down_enemy:
 			time_left_for_takedown -= delta
+			GameManager.takedown_progress_changed.emit(3.0/time_left_for_takedown)
 			if time_left_for_takedown <= 0:
 				taking_down_enemy.die()
 				taking_down_enemy = null
+				GameManager.takedown_progress_changed.emit(-1)
 		else:
 			taking_down_enemy.is_silent_takedown = false
 			taking_down_enemy = null
