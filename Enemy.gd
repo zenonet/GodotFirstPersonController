@@ -16,7 +16,6 @@ var state: EnemyState = EnemyState.Idle
 var investigationTarget: Vector3
 @onready var idlePosition:Vector3 = position
 
-
 var player_visibility:int = 0 
 
 func _ready():
@@ -39,7 +38,7 @@ func sound_created(sound_position:Vector3, volume:float):
 func check_vision():
 	
 	var angle:float = rad_to_deg((player.find_child("Camera").global_position - position).angle_to(-$Eyes.global_basis.z))
-	if angle < SPOT_FOV:
+	if angle <= SPOT_FOV:
 		var space_state = get_world_3d().direct_space_state
 		var query = PhysicsRayQueryParameters3D.create($Eyes.global_position, player.global_position)
 
@@ -49,7 +48,7 @@ func check_vision():
 				player_visibility -= 1
 			return
 			
-		player_visibility += 1
+		player_visibility += 100 / player.global_position.distance_to(global_position) * player.is_crouching if 0.8 else 1
 		
 		if player_visibility >= 70:
 			print("Chasing...")

@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdybyi3eagy6g"]
+
+[ext_resource type="Script" path="res://GameOverMsg.gd" id="1_l0bmq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_totsc"]
+font_size = 72
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_top = 50.0
+offset_right = 2301.0
+offset_bottom = 314.0
+
+[node name="GameOverMsg" type="Label" parent="CenterContainer"]
+layout_mode = 2
+text = "GAME OVER"
+label_settings = SubResource("LabelSettings_totsc")
+script = ExtResource("1_l0bmq")
+
+[node name="Timer" type="Timer" parent="CenterContainer/GameOverMsg"]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="CenterContainer/GameOverMsg/Timer" to="CenterContainer/GameOverMsg" method="_on_timer_timeout"]
