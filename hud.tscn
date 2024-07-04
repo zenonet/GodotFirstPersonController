@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdybyi3eagy6g"]
+[gd_scene load_steps=4 format=3 uid="uid://bdybyi3eagy6g"]
 
 [ext_resource type="Script" path="res://GameOverMsg.gd" id="1_l0bmq"]
+[ext_resource type="Script" path="res://HealthBar.gd" id="2_txsf6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_totsc"]
 font_size = 72
@@ -28,5 +29,18 @@ script = ExtResource("1_l0bmq")
 [node name="Timer" type="Timer" parent="CenterContainer/GameOverMsg"]
 wait_time = 3.0
 one_shot = true
+
+[node name="CenterContainer2" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_top = 941.0
+offset_right = 2301.0
+offset_bottom = 1205.0
+
+[node name="HealthBar" type="ProgressBar" parent="CenterContainer2"]
+custom_minimum_size = Vector2(400, 25)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+script = ExtResource("2_txsf6")
 
 [connection signal="timeout" from="CenterContainer/GameOverMsg/Timer" to="CenterContainer/GameOverMsg" method="_on_timer_timeout"]

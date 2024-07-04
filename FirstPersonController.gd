@@ -24,6 +24,8 @@ var health:int = 100
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	await get_tree().physics_frame
+	GameManager.player_health_changed.emit(health)
 	
 var time_since_bullet:float = 0.0
 func _process(delta):
@@ -54,8 +56,9 @@ func let_go():
 
 func apply_damage(amount:int):
 	health -= amount
+	GameManager.player_health_changed.emit(health)
 	if health < 1:
-		GameManager.game_over()
+		GameManager.game_over.emit()
 	
 func shoot():
 

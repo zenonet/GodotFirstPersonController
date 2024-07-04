@@ -20,6 +20,10 @@ var player_visibility:int = 0
 
 func _ready():
 	GameManager.sound_created.connect(sound_created)
+	
+	set_physics_process(false)
+	await get_tree().physics_frame
+	set_physics_process(true)
 
 func sound_created(sound_position:Vector3, volume:float):
 	if(sound_position == global_position or is_silent_takedown):
@@ -29,7 +33,7 @@ func sound_created(sound_position:Vector3, volume:float):
 	if(local_volume <= EAR_THRESHOLD): 
 		return
 	
-	if state != EnemyState.Chase:
+	if state != EnemyState.Chase and state != EnemyState.Investigating:
 		print("Investigating...")
 		state = EnemyState.Investigating
 		investigationTarget = sound_position
@@ -48,7 +52,7 @@ func check_vision():
 				player_visibility -= 1
 			return
 			
-		player_visibility += 100 / player.global_position.distance_to(global_position) * player.is_crouching if 0.8 else 1
+		player_visibility += 150 / player.global_position.distance_to(global_position) * 0.8 if player.is_crouching else 1
 		
 		if player_visibility >= 70:
 			print("Chasing...")
@@ -86,7 +90,7 @@ func _physics_process(delta):
 		$agent.set_target_position(player.position)
 		
 		if player.global_position.distance_to(global_position) < 4:
-			player.apply_damage(10)
+			player.apply_damage(2)
 			
 	if $agent.is_target_reached():
 		return
