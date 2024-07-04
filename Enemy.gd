@@ -21,7 +21,7 @@ var player_visibility:int = 0
 
 func _ready():
 	GameManager.sound_created.connect(sound_created)
-	
+
 func sound_created(sound_position:Vector3, volume:float):
 	if(sound_position == global_position or is_silent_takedown):
 		return
@@ -35,7 +35,7 @@ func sound_created(sound_position:Vector3, volume:float):
 		state = EnemyState.Investigating
 		investigationTarget = sound_position
 		$agent.set_target_position(sound_position)
-	
+
 func check_vision():
 	
 	var angle:float = rad_to_deg((player.find_child("Camera").global_position - position).angle_to(-$Eyes.global_basis.z))
@@ -86,6 +86,9 @@ func _physics_process(delta):
 	if(state == EnemyState.Chase):
 		$agent.set_target_position(player.position)
 		
+		if player.global_position.distance_to(global_position) < 4:
+			player.apply_damage(10)
+			
 	if $agent.is_target_reached():
 		return
 	

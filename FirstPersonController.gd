@@ -20,6 +20,7 @@ var mouse_sensitivity = 0.25
 
 var is_aiming:bool = false
 var is_crouching:bool = false
+var health:int = 100
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -51,6 +52,11 @@ func let_go():
 	pickupObj.reparent(get_parent())
 	pickupObj = null
 
+func apply_damage(amount:int):
+	health -= amount
+	if health < 1:
+		GameManager.game_over()
+	
 func shoot():
 
 	if(time_since_bullet < 1.0/FIRE_RATE):
