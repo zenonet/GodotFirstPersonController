@@ -11,6 +11,7 @@ const AIM_RECOIL = 0.4
 
 @onready var raycast = $"Camera/RayCast"
 @export var bulletScene: PackedScene
+@export var coinScene: PackedScene
 var pickupObj = null
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -53,6 +54,12 @@ func let_go():
 	pickupObj.freeze = false
 	pickupObj.reparent(get_parent())
 	pickupObj = null
+
+func throw_coin():
+	var coin = coinScene.instantiate()
+	get_tree().root.add_child(coin)
+	coin.global_position = $Camera.global_position -$Camera.global_transform.basis.z
+	coin.apply_impulse((-$Camera.global_transform.basis.z).normalized()*15)
 
 func apply_damage(amount:int):
 	health -= amount
@@ -118,6 +125,9 @@ func _physics_process(delta):
 		$Camera.position = $Camera.position.move_toward($CrouchingCameraPosition.position, 0.05)
 	else:
 		$Camera.position = $Camera.position.move_toward($NormalCameraPosition.position, 0.05)
+	
+	if Input.is_action_just_pressed("throw_coin"):
+		throw_coin()
 	
 	if Input.is_action_just_pressed("pickup"):
 		if pickupObj == null and raycast.is_colliding() and raycast.get_collider() is RigidBody3D:

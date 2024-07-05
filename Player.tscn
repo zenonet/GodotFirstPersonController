@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dgdkt1n2tre1x"]
+[gd_scene load_steps=7 format=3 uid="uid://dgdkt1n2tre1x"]
 
 [ext_resource type="Script" path="res://FirstPersonController.gd" id="1_8lccc"]
 [ext_resource type="PackedScene" uid="uid://cw8eo44imysbl" path="res://bullet.tscn" id="2_hn1b3"]
+[ext_resource type="PackedScene" uid="uid://cpkdwxjy67d87" path="res://coin.tscn" id="3_lx6b1"]
 [ext_resource type="PackedScene" uid="uid://b404764qr4syq" path="res://AK47.glb" id="3_wn5n4"]
 [ext_resource type="AudioStream" uid="uid://b5nlnq3jfqs55" path="res://sounds/shot.wav" id="4_wp0sl"]
 
@@ -11,6 +12,7 @@
 platform_floor_layers = 4294967293
 script = ExtResource("1_8lccc")
 bulletScene = ExtResource("2_hn1b3")
+coinScene = ExtResource("3_lx6b1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_8q0e5")
