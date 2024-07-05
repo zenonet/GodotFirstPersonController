@@ -15,7 +15,7 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var state: EnemyState = EnemyState.Idle
 var investigationTarget: Vector3
 @onready var idlePosition:Vector3 = position
-
+var attention = 0
 var player_visibility:int = 0 
 
 func _ready():
@@ -35,9 +35,7 @@ func sound_created(sound_position:Vector3, volume:float):
 	
 	if state != EnemyState.Chase and state != EnemyState.Investigating:
 		print("Investigating...")
-		state = EnemyState.Investigating
-		investigationTarget = sound_position
-		$agent.set_target_position(sound_position)
+		investigate(sound_position)
 
 func check_vision():
 	# if state == EnemyState.Investigating
@@ -53,7 +51,7 @@ func check_vision():
 			return
 			
 		player_visibility += (200.0 / player.global_position.distance_to(global_position)) * (0.8 if player.is_crouching else 1)
-		if player_visibility >= 70:
+		if player_visibility >= 70 - attention:
 			print("Chasing...")
 			on_found_player()
 	else:
@@ -64,6 +62,13 @@ func on_found_player():
 	$Voice.play()
 	GameManager.sound_created.emit(global_position, 0.4)
 	state = EnemyState.Chase
+
+func investigate(position:Vector3):
+	if state != EnemyState.Investigating:
+		attention += 1
+	state = EnemyState.Investigating
+	investigationTarget = position
+	$agent.set_target_position(position)
 
 func _physics_process(delta):
 	if is_silent_takedown:
@@ -81,6 +86,7 @@ func _physics_process(delta):
 			if(abs(desRot - rotation_degrees.y) < 5):
 				print("Investigation over, returning to idle position")
 				state = EnemyState.Idle
+				attention -= 0.9
 				return
 			rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 1.5)
 		
@@ -111,6 +117,8 @@ func _physics_process(delta):
 
 func apply_damage(amount:int):
 	health -= amount
+	attention += amount/100
+	investigate(global_position)
 	if(health <= 0):
 		die()
 		
