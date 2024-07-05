@@ -19,4 +19,4 @@ func on_game_over():
 	print("Old scene freed")
 	var scene = load("res://env.tscn").instantiate()
 	scene.name = "Region"
-	get_tree().root.add_child(scene)
+	get_tree().root.get_node("Root").add_child(scene)

@@ -40,7 +40,7 @@ func sound_created(sound_position:Vector3, volume:float):
 		$agent.set_target_position(sound_position)
 
 func check_vision():
-	
+	# if state == EnemyState.Investigating
 	var angle:float = rad_to_deg((player.find_child("Camera").global_position - position).angle_to(-$Eyes.global_basis.z))
 	if angle <= SPOT_FOV:
 		var space_state = get_world_3d().direct_space_state
@@ -52,8 +52,7 @@ func check_vision():
 				player_visibility -= 1
 			return
 			
-		player_visibility += 150 / player.global_position.distance_to(global_position) * 0.8 if player.is_crouching else 1
-		
+		player_visibility += (200.0 / player.global_position.distance_to(global_position)) * (0.8 if player.is_crouching else 1)
 		if player_visibility >= 70:
 			print("Chasing...")
 			on_found_player()
@@ -83,7 +82,7 @@ func _physics_process(delta):
 				print("Investigation over, returning to idle position")
 				state = EnemyState.Idle
 				return
-			rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 0.8)
+			rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 1.5)
 		
 	var direction:Vector3
 	if(state == EnemyState.Chase):
@@ -99,11 +98,17 @@ func _physics_process(delta):
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		
+		var a:float = rad_to_deg(Vector2(direction.x, direction.z).angle())
+		if state == EnemyState.Chase:
+			print("Rotating to %d" % a)
+		rotation_degrees.y = a
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		
-	rotation_degrees.y = rad_to_deg(rotate_toward(rotation.y, global_position.angle_to(direction), 0.4))
+	# rotation_degrees.y = rad_to_deg(rotate_toward(deg_to_rad(rotation_degrees.y), Vector3.ZERO.angle_to(direction), 0.4))
+
 	move_and_slide()
 
 func apply_damage(amount:int):
