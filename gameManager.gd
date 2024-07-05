@@ -16,7 +16,8 @@ func on_game_over():
 	# print(get_tree().root.get_children().map(func(x): return x.name))
 
 	get_tree().root.get_node("Root/Region").queue_free()
+	await get_tree().physics_frame
 	print("Old scene freed")
 	var scene = load("res://env.tscn").instantiate()
-	scene.name = "Region"
 	get_tree().root.get_node("Root").add_child(scene)
+	scene.name = "Region"

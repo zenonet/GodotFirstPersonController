@@ -88,7 +88,7 @@ func _physics_process(delta):
 	if(state == EnemyState.Chase):
 		$agent.set_target_position(player.position)
 		
-		if player.global_position.distance_to(global_position) < 4:
+		if player.global_position.distance_to(global_position) < 1.8:
 			player.apply_damage(2)
 			
 	if $agent.is_target_reached():
@@ -99,10 +99,8 @@ func _physics_process(delta):
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 		
-		var a:float = rad_to_deg(Vector2(direction.x, direction.z).angle())
-		if state == EnemyState.Chase:
-			print("Rotating to %d" % a)
-		rotation_degrees.y = a
+		rotation.y = rotate_toward(rotation.y, atan2(-direction.x,-direction.z), 0.18)
+		
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
@@ -113,7 +111,6 @@ func _physics_process(delta):
 
 func apply_damage(amount:int):
 	health -= amount
-	# print("now on %d hp" % health)
 	if(health <= 0):
 		die()
 		
