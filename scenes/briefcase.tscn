@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cocca48au7onb"]
 
-[ext_resource type="Script" path="res://briefcase.gd" id="1_832rw"]
+[ext_resource type="Script" path="res://scripts/briefcase.gd" id="1_832rw"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_n30l3"]
 radius = 2.81559

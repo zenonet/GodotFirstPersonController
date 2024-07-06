@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://bdybyi3eagy6g"]
 
-[ext_resource type="Script" path="res://GameOverMsg.gd" id="1_l0bmq"]
-[ext_resource type="Script" path="res://HealthBar.gd" id="2_txsf6"]
-[ext_resource type="Script" path="res://TakedownProgressBar.gd" id="3_egigg"]
+[ext_resource type="Script" path="res://scripts/GameOverMsg.gd" id="1_l0bmq"]
+[ext_resource type="Script" path="res://scripts/HealthBar.gd" id="2_txsf6"]
+[ext_resource type="Script" path="res://scripts/TakedownProgressBar.gd" id="3_egigg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_totsc"]
 font_size = 72

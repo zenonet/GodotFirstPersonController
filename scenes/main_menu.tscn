@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://jo3j434608lg"]
+
+[ext_resource type="Script" path="res://scripts/MainMenu.gd" id="1_r87wq"]
+
+[sub_resource type="Theme" id="Theme_uurro"]
+default_font_size = 30
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r87wq")
+
+[node name="BoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 124.0
+offset_right = 130.0
+offset_bottom = 174.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="BoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_uurro")
+text = "Play"
+
+[connection signal="pressed" from="BoxContainer/Button" to="." method="on_play_pressed"]

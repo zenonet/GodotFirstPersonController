@@ -17,12 +17,25 @@ func _process(delta):
 func on_game_over():
 	# print(get_tree().root.get_children().map(func(x): return x.name))
 
-	get_tree().root.get_node("Root/Region").queue_free()
-	await get_tree().physics_frame
-	print("Old scene freed")
-	var scene = load("res://level1.tscn").instantiate()
-	get_tree().root.get_node("Root").add_child(scene)
-	scene.name = "Region"
+	load_level(0)
 
 func on_level_completed():
 	pass
+
+var levels = [
+	"res://level1.tscn",
+]
+
+func load_level(id:int):
+	var old = get_tree().root.get_node("Root/Region")
+	if old != null:
+		old.queue_free()
+		
+	var menu = get_tree().root.get_node("Root/MainMenu")
+	if menu != null:
+		menu.queue_free()
+	await get_tree().physics_frame
+
+	var scene = load(levels[id]).instantiate()
+	get_tree().root.get_node("Root").add_child(scene)
+	scene.name = "Region"

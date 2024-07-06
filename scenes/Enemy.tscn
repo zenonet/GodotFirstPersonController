@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://n3g67hw51j60"]
 
-[ext_resource type="Script" path="res://Enemy.gd" id="1_c2dqd"]
+[ext_resource type="Script" path="res://scripts/Enemy.gd" id="1_c2dqd"]
 [ext_resource type="AudioStream" uid="uid://dp0xstadkrb5r" path="res://sounds/hey.wav" id="2_f6ms2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6qpqb"]
