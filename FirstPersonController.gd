@@ -140,14 +140,16 @@ func _physics_process(delta):
 		if raycast.is_colliding() and raycast.get_collider().is_in_group("enemies"):
 			taking_down_enemy = raycast.get_collider()
 			taking_down_enemy.is_silent_takedown = true
-			time_left_for_takedown = 3
+			time_left_for_takedown = 3.0
 	if Input.is_action_pressed("silent_takedown"):
 		if taking_down_enemy == null:
 			return
 		if raycast.is_colliding() and raycast.get_collider() == taking_down_enemy:
 			time_left_for_takedown -= delta
-			GameManager.takedown_progress_changed.emit(3.0/time_left_for_takedown)
-			if time_left_for_takedown <= 0:
+			print("Progress changed to %f. Time left: %f" % [(-time_left_for_takedown/3 + 3), time_left_for_takedown])
+
+			GameManager.takedown_progress_changed.emit(-(time_left_for_takedown/3) + 1)
+			if time_left_for_takedown <= 0.0:
 				taking_down_enemy.die()
 				taking_down_enemy = null
 				GameManager.takedown_progress_changed.emit(-1)

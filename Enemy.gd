@@ -20,9 +20,10 @@ var attention = 0
 var player_visibility:int = 0 
 
 var sound_volume = {
-	SoundType.Coin: 1.0,
+	SoundType.Coin: 0.8,
 	SoundType.Shot: 10.0,
 	SoundType.Steps: 0.35,
+	SoundType.GuardYell: 1.2,
 }
 
 func _ready():
@@ -41,9 +42,12 @@ func sound_created(sound_position:Vector3, type:int):
 		return
 	
 	if state != EnemyState.Chase and state != EnemyState.Investigating:
-		print("Investigating...")
-		sound_type_being_investigated = type
-		investigate(sound_position)
+		if type == SoundType.GuardYell:
+			state = EnemyState.Chase
+		else:
+			print("Investigating...")
+			sound_type_being_investigated = type
+			investigate(sound_position)
 
 func check_vision():
 	# if state == EnemyState.Investigating
@@ -58,17 +62,19 @@ func check_vision():
 				player_visibility -= 1
 			return
 			
-		player_visibility += (200.0 / player.global_position.distance_to(global_position)) * (0.8 if player.is_crouching else 1)
-		if player_visibility >= 70 - attention:
+		var a = (65.0 / player.global_position.distance_to(global_position)) * (0.8 if player.is_crouching else 1.0)
+		print("Player visibility increase: %f" % a)
+		player_visibility += a
+		
+		if player_visibility >= 150 - attention:
 			print("Chasing...")
 			on_found_player()
-	else:
-		if player_visibility > 0:
+	if player_visibility > 0:
 			player_visibility -= 1
 
 func on_found_player():
 	$Voice.play()
-	GameManager.sound_created.emit(global_position, 0.4)
+	GameManager.sound_created.emit(global_position, SoundType.GuardYell)
 	state = EnemyState.Chase
 
 func investigate(position:Vector3):
