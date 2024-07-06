@@ -19,6 +19,8 @@ var sound_type_being_investigated:int = -1
 var attention = 0
 var player_visibility:int = 0 
 
+@export var pathFollow:PathFollow3D
+
 var sound_volume = {
 	SoundType.Coin: 0.8,
 	SoundType.Shot: 10.0,
@@ -91,8 +93,13 @@ func _physics_process(delta):
 		return
 	
 	if(state == EnemyState.Idle):
+		if(pathFollow != null):
+			idlePosition = pathFollow.global_position
 		if(position.distance_squared_to(idlePosition) > 1):
 			$agent.set_target_position(idlePosition)
+		elif pathFollow != null:
+			pathFollow.progress += 0.2
+			
 		check_vision()
 	
 	if(state == EnemyState.Investigating):

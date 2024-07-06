@@ -27,6 +27,7 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	await get_tree().physics_frame
 	GameManager.player_health_changed.emit(health)
+	GameManager.takedown_progress_changed.emit(-1)
 	
 var time_since_bullet:float = 0.0
 func _process(delta):
