@@ -5,6 +5,7 @@ signal game_over()
 signal player_health_changed(newHealth:int)
 signal takedown_progress_changed(progress:float)
 signal level_completed
+signal briefcase_picked_up
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	game_over.connect(on_game_over)

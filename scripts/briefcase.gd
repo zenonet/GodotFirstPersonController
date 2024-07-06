@@ -8,3 +8,4 @@ func _on_area_3d_body_entered(body):
 	
 	body.has_briefcase = true
 	queue_free()
+	GameManager.briefcase_picked_up.emit()

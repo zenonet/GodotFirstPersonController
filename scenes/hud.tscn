@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bdybyi3eagy6g"]
+[gd_scene load_steps=9 format=3 uid="uid://bdybyi3eagy6g"]
 
 [ext_resource type="Script" path="res://scripts/GameOverMsg.gd" id="1_l0bmq"]
 [ext_resource type="Script" path="res://scripts/HealthBar.gd" id="2_txsf6"]
 [ext_resource type="Script" path="res://scripts/TakedownProgressBar.gd" id="3_egigg"]
+[ext_resource type="Script" path="res://scenes/Tutorial.gd" id="4_06yeu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_totsc"]
 font_size = 72
@@ -23,31 +24,38 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 0
-offset_top = 50.0
-offset_right = 2301.0
-offset_bottom = 314.0
-
-[node name="GameOverMsg" type="Label" parent="CenterContainer"]
-layout_mode = 2
+[node name="GameOverMsg" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -206.0
+offset_top = 134.0
+offset_right = 207.0
+offset_bottom = 233.0
+grow_horizontal = 2
 text = "GAME OVER"
 label_settings = SubResource("LabelSettings_totsc")
 script = ExtResource("1_l0bmq")
 
-[node name="Timer" type="Timer" parent="CenterContainer/GameOverMsg"]
+[node name="Timer" type="Timer" parent="GameOverMsg"]
 wait_time = 3.0
 one_shot = true
 
-[node name="CenterContainer2" type="CenterContainer" parent="."]
-layout_mode = 0
-offset_top = 941.0
-offset_right = 2301.0
-offset_bottom = 1205.0
-
-[node name="HealthBar" type="ProgressBar" parent="CenterContainer2"]
+[node name="HealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(400, 25)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -259.0
+offset_right = 200.0
+offset_bottom = -234.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_5ovg7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_78kxk")
@@ -55,19 +63,37 @@ value = 50.0
 show_percentage = false
 script = ExtResource("2_txsf6")
 
-[node name="CenterContainer3" type="CenterContainer" parent="."]
-layout_mode = 0
-offset_top = 858.0
-offset_right = 2301.0
-offset_bottom = 1122.0
-
-[node name="TakedownProgressBar" type="ProgressBar" parent="CenterContainer3"]
+[node name="TakedownProgressBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(400, 25)
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -175.0
+offset_right = 200.0
+offset_bottom = -150.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_styles/fill = SubResource("StyleBoxFlat_mn7yb")
 max_value = 1.0
 value = 1.0
 show_percentage = false
 script = ExtResource("3_egigg")
 
-[connection signal="timeout" from="CenterContainer/GameOverMsg/Timer" to="CenterContainer/GameOverMsg" method="_on_timer_timeout"]
+[node name="TutorialLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 100.0
+offset_right = 20.0
+offset_bottom = 123.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 22
+script = ExtResource("4_06yeu")
+
+[connection signal="timeout" from="GameOverMsg/Timer" to="GameOverMsg" method="_on_timer_timeout"]
