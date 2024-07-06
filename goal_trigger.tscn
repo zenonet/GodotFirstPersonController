@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://blv4cd2lyp1vm"]
+
+[ext_resource type="Script" path="res://goal_trigger.gd" id="1_xcdqf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aojuo"]
+size = Vector3(1.37207, 1.14453, 2.53333)
+
+[node name="GoalTrigger" type="Area3D"]
+script = ExtResource("1_xcdqf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_aojuo")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

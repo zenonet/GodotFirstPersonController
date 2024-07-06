@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://cocca48au7onb"]
+
+[ext_resource type="Script" path="res://briefcase.gd" id="1_832rw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_n30l3"]
+radius = 2.81559
+
+[node name="Briefcase" type="Node3D"]
+script = ExtResource("1_832rw")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+size = Vector3(0.791992, 0.385742, 1)
+
+[node name="Area3D" type="Area3D" parent="."]
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_n30l3")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

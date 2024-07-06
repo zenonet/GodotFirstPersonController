@@ -23,6 +23,8 @@ var is_aiming:bool = false
 var is_crouching:bool = false
 var health:int = 100
 
+var has_briefcase:bool = false
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	await get_tree().physics_frame
