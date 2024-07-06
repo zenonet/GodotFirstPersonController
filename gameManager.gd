@@ -1,6 +1,6 @@
 extends Node
 
-signal sound_created(position:Vector3, volume:float)
+signal sound_created(position:Vector3, type)
 signal game_over()
 signal player_health_changed(newHealth:int)
 signal takedown_progress_changed(progress:float)

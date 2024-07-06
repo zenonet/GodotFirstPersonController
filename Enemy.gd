@@ -14,9 +14,16 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 var state: EnemyState = EnemyState.Idle
 var investigationTarget: Vector3
+var sound_type_being_investigated:int = -1
 @onready var idlePosition:Vector3 = position
 var attention = 0
 var player_visibility:int = 0 
+
+var sound_volume = {
+	SoundType.Coin: 1.0,
+	SoundType.Shot: 10.0,
+	SoundType.Steps: 0.35,
+}
 
 func _ready():
 	GameManager.sound_created.connect(sound_created)
@@ -25,16 +32,17 @@ func _ready():
 	await get_tree().physics_frame
 	set_physics_process(true)
 
-func sound_created(sound_position:Vector3, volume:float):
+func sound_created(sound_position:Vector3, type:int):
 	if(sound_position == global_position or is_silent_takedown):
 		return
-	var local_volume:float = volume/position.distance_to(sound_position)
-
+	var local_volume:float = float(sound_volume[type])/position.distance_to(sound_position)
+	
 	if(local_volume <= EAR_THRESHOLD): 
 		return
 	
 	if state != EnemyState.Chase and state != EnemyState.Investigating:
 		print("Investigating...")
+		sound_type_being_investigated = type
 		investigate(sound_position)
 
 func check_vision():
@@ -64,6 +72,8 @@ func on_found_player():
 	state = EnemyState.Chase
 
 func investigate(position:Vector3):
+	if state == EnemyState.Chase:
+		return
 	if state != EnemyState.Investigating:
 		attention += 1
 	state = EnemyState.Investigating
@@ -82,13 +92,16 @@ func _physics_process(delta):
 	if(state == EnemyState.Investigating):
 		check_vision()
 		if $agent.is_target_reached():
-			var desRot = rad_to_deg(global_position.angle_to(idlePosition)) + 360
-			if(abs(desRot - rotation_degrees.y) < 5):
-				print("Investigation over, returning to idle position")
-				state = EnemyState.Idle
-				attention -= 0.9
-				return
-			rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 1.5)
+			if sound_type_being_investigated == SoundType.Steps or sound_type_being_investigated == SoundType.Shot:
+				var desRot = rad_to_deg(global_position.angle_to(idlePosition)) + 360
+				if(abs(desRot - rotation_degrees.y) < 5):
+					print("Investigation over, returning to idle position")
+					state = EnemyState.Idle
+					attention -= 0.9
+					return
+				rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 1.5)
+			elif sound_type_being_investigated == SoundType.Coin and $InvestigationTimer.is_stopped():
+				$InvestigationTimer.start(1.5)
 		
 	var direction:Vector3
 	if(state == EnemyState.Chase):
@@ -130,3 +143,7 @@ enum EnemyState{
 	Chase,
 	Investigating,
 }
+
+
+func _on_investigation_timeout():
+	state = EnemyState.Idle

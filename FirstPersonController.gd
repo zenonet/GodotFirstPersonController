@@ -109,7 +109,7 @@ func shoot():
 	#b.rotation_degrees = Vector3($Camera.rotation_degrees.x + x_spread, rotation_degrees.y + y_spread, 0)
 	
 	# create noise
-	GameManager.sound_created.emit($Camera/Weapon/Guntip.global_position, 1)
+	GameManager.sound_created.emit($Camera/Weapon/Guntip.global_position, SoundType.Shot)
 	if not $"Camera/audioPlayer".is_playing():
 		$"Camera/audioPlayer".play()
 
@@ -168,7 +168,7 @@ func _physics_process(delta):
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, rotation.y)
 
 	if(direction && !is_crouching):
-		GameManager.sound_created.emit(global_position, 0.1)
+		GameManager.sound_created.emit(global_position, SoundType.Steps)
 
 	var speed
 	if Input.is_action_pressed("sprint"):

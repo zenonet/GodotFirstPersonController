@@ -15,6 +15,7 @@ script = ExtResource("1_c2dqd")
 shape = SubResource("CapsuleShape3D_6qpqb")
 
 [node name="agent" type="NavigationAgent3D" parent="."]
+target_desired_distance = 1.8
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 2.01064, 0, 0, 0, 1, 0, 0, 0)
@@ -31,3 +32,9 @@ material = SubResource("StandardMaterial3D_r8421")
 [node name="Voice" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_f6ms2")
 bus = &"Voice"
+
+[node name="InvestigationTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="InvestigationTimer" to="." method="_on_investigation_timeout"]
