@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://jo3j434608lg"]
+[gd_scene load_steps=5 format=3 uid="uid://jo3j434608lg"]
 
 [ext_resource type="Script" path="res://scripts/MainMenu.gd" id="1_r87wq"]
 
 [sub_resource type="Theme" id="Theme_uurro"]
 default_font_size = 30
+
+[sub_resource type="InputEventAction" id="InputEventAction_tx5gu"]
+action = &"close"
+
+[sub_resource type="Shortcut" id="Shortcut_65opm"]
+events = [SubResource("InputEventAction_tx5gu")]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -12,6 +18,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_r87wq")
 
 [node name="BoxContainer" type="VBoxContainer" parent="."]
@@ -20,15 +28,23 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
-offset_top = 124.0
+offset_top = 188.0
 offset_right = 130.0
-offset_bottom = 174.0
+offset_bottom = 304.0
 grow_horizontal = 2
+theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Button" type="Button" parent="BoxContainer"]
+[node name="PlayButton" type="Button" parent="BoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_uurro")
 text = "Play"
 
-[connection signal="pressed" from="BoxContainer/Button" to="." method="on_play_pressed"]
+[node name="QuitButton" type="Button" parent="BoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_uurro")
+shortcut = SubResource("Shortcut_65opm")
+text = "Quit"
+
+[connection signal="pressed" from="BoxContainer/PlayButton" to="." method="on_play_pressed"]
+[connection signal="pressed" from="BoxContainer/QuitButton" to="." method="_on_quit_pressed"]

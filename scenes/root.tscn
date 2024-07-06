@@ -8,4 +8,3 @@
 [node name="MainMenu" parent="." instance=ExtResource("1_tk1qy")]
 
 [node name="UI" parent="." instance=ExtResource("2_m3tj3")]
-visible = false

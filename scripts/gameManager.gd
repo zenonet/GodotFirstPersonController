@@ -9,21 +9,16 @@ signal level_completed
 func _ready():
 	game_over.connect(on_game_over)
 	level_completed.connect(on_level_completed)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+	set_hud_visibility(false)
 
 func on_game_over():
-	# print(get_tree().root.get_children().map(func(x): return x.name))
-
 	load_level(0)
 
 func on_level_completed():
-	pass
+	load_main_menu()
 
 var levels = [
-	"res://level1.tscn",
+	"res://scenes/level1.tscn",
 ]
 
 func load_level(id:int):
@@ -39,3 +34,17 @@ func load_level(id:int):
 	var scene = load(levels[id]).instantiate()
 	get_tree().root.get_node("Root").add_child(scene)
 	scene.name = "Region"
+	set_hud_visibility(true)
+	
+func load_main_menu():
+	var old = get_tree().root.get_node("Root/Region")
+	if old != null:
+		old.queue_free()
+	var scene = load("res://scenes/main_menu.tscn").instantiate()
+	get_tree().root.get_node("Root").add_child(scene)
+	set_hud_visibility(false)
+		
+func set_hud_visibility(s):
+	var hud = get_tree().root.get_node("Root/UI")
+	if hud != null:
+		hud.visible = s
