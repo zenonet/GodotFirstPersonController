@@ -1,7 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://n3g67hw51j60"]
+[gd_scene load_steps=10 format=3 uid="uid://n3g67hw51j60"]
 
 [ext_resource type="Script" path="res://scripts/Enemy.gd" id="1_c2dqd"]
+[ext_resource type="AudioStream" uid="uid://dqetomrkx5pqb" path="res://sounds/whatWasThat1.wav" id="2_43k2n"]
 [ext_resource type="AudioStream" uid="uid://dp0xstadkrb5r" path="res://sounds/hey.wav" id="2_f6ms2"]
+[ext_resource type="AudioStream" uid="uid://c1ja4jnikjlyk" path="res://sounds/whatWasThat2.wav" id="3_pmhhp"]
+[ext_resource type="AudioStream" uid="uid://bu4ox1xcuegdy" path="res://sounds/weShouldBetterTakeALook.wav" id="4_6cm3d"]
+[ext_resource type="AudioStream" uid="uid://dhk0mf6qg310b" path="res://sounds/mustHaveBeenNothing.wav" id="5_o80k8"]
+[ext_resource type="AudioStream" uid="uid://n5lu3uvcqi6d" path="res://sounds/wereGonnaKillYou.wav" id="5_q7hh1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6qpqb"]
 
@@ -10,12 +15,16 @@ albedo_color = Color(0.083392, 0.083392, 0.083392, 1)
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemies"]]
 script = ExtResource("1_c2dqd")
+investigationSounds = Array[AudioStreamWAV]([ExtResource("2_43k2n"), ExtResource("3_pmhhp"), ExtResource("4_6cm3d")])
+investigationCancelledSounds = Array[AudioStreamWAV]([ExtResource("5_o80k8")])
+playerFoundSounds = Array[AudioStreamWAV]([ExtResource("5_q7hh1"), ExtResource("5_q7hh1"), null])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_6qpqb")
 
 [node name="agent" type="NavigationAgent3D" parent="."]
 target_desired_distance = 1.8
+avoidance_enabled = true
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 2.01064, 0, 0, 0, 1, 0, 0, 0)

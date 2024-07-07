@@ -20,6 +20,9 @@ var attention = 0
 var player_visibility:int = 0 
 
 @export var pathFollow:PathFollow3D
+@export var investigationSounds: Array[AudioStreamWAV]
+@export var investigationCancelledSounds: Array[AudioStreamWAV]
+@export var playerFoundSounds: Array[AudioStreamWAV]
 
 var sound_volume = {
 	SoundType.Coin: 0.8,
@@ -56,7 +59,7 @@ func check_vision():
 	var angle:float = rad_to_deg((player.find_child("Camera").global_position - position).angle_to(-$Eyes.global_basis.z))
 	if angle <= SPOT_FOV:
 		var space_state = get_world_3d().direct_space_state
-		var query = PhysicsRayQueryParameters3D.create($Eyes.global_position, player.global_position)
+		var query = PhysicsRayQueryParameters3D.create($Eyes.global_position, player.global_position + Vector3.DOWN)
 
 		var result = space_state.intersect_ray(query)
 		if result.is_empty() or result.collider != player:
@@ -75,6 +78,7 @@ func check_vision():
 			player_visibility -= 1
 
 func on_found_player():
+	$Voice.stream = playerFoundSounds[randi_range(0, len(playerFoundSounds)-1)]
 	$Voice.play()
 	GameManager.sound_created.emit(global_position, SoundType.GuardYell)
 	state = EnemyState.Chase
@@ -84,6 +88,9 @@ func investigate(position:Vector3):
 		return
 	if state != EnemyState.Investigating:
 		attention += 1
+		$Voice.stream = investigationSounds[randi_range(0, len(investigationSounds)-1)]
+		$Voice.play()
+
 	state = EnemyState.Investigating
 	investigationTarget = position
 	$agent.set_target_position(position)
@@ -109,12 +116,12 @@ func _physics_process(delta):
 				var desRot = rad_to_deg(global_position.angle_to(idlePosition)) + 360
 				if(abs(desRot - rotation_degrees.y) < 5):
 					print("Investigation over, returning to idle position")
-					state = EnemyState.Idle
+					return_to_idle()
 					attention -= 0.9
 					return
 				rotation_degrees.y = move_toward(rotation_degrees.y, desRot, 1.5)
 			elif sound_type_being_investigated == SoundType.Coin and $InvestigationTimer.is_stopped():
-				$InvestigationTimer.start(1.5)
+				$InvestigationTimer.start(2.5)
 		
 	var direction:Vector3
 	if(state == EnemyState.Chase):
@@ -141,6 +148,10 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+func return_to_idle():
+	$Voice.stream = investigationCancelledSounds[randi_range(0, len(investigationCancelledSounds)-1)]
+	$Voice.play()
+	state = EnemyState.Idle
 func apply_damage(amount:int):
 	health -= amount
 	attention += amount/100
@@ -159,4 +170,4 @@ enum EnemyState{
 
 
 func _on_investigation_timeout():
-	state = EnemyState.Idle
+	return_to_idle()
