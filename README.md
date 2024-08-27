@@ -3,6 +3,9 @@
 Why is the Repo called "GodotFirstPersonController"? Well, I originally wanted to just write a simple FirstPersonController for Godot to learn Godot but when I noticed how easy that was, I decided to continue the project into some kind of FirstPerson shooter/stealth game.
 The game still only features one level but I learned a lot about Godot while creating the games mechanics.
 
+![1000018609](https://github.com/user-attachments/assets/417f6d85-6af8-4a5c-90bb-eb4bc3fff293)
+
+
 ## How to play
 
 Here's a full keymap:
